@@ -22,7 +22,7 @@ The database schema includes the following tables:
 
 
 ## Instructions
-
+- Execute `create_user.sql` script to create the default user that will be used by the application.
 - Execute `create_schema.sql` script to create the fleet management database.
-- You can execute `insert_data.sql` to create some dummy data on **Drone** and **Medication** tables
+- You can execute `insert_data.sql` to create some dummy data on **Drone** and **Medication** tables.
 
