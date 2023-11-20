@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS `Load` (
   CONSTRAINT `fk_Load_Drone`
     FOREIGN KEY (`Drone_id`)
     REFERENCES `fleet`.`Drone` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Load_Drone_idx` ON `fleet`.`Load` (`Drone_id` ASC) VISIBLE;
@@ -60,14 +58,10 @@ CREATE TABLE IF NOT EXISTS `fleet`.`Drone` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Drone_Drone_Model`
     FOREIGN KEY (`Drone_Model_id`)
-    REFERENCES `fleet`.`Drone_Model` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
+    REFERENCES `fleet`.`Drone_Model` (`id`),
   CONSTRAINT `fk_Drone_Current_Load`
     FOREIGN KEY (`Current_Load_id`)
     REFERENCES `fleet`.`Load` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Drone_Drone_Model_idx` ON `fleet`.`Drone` (`Drone_Model_id` ASC) VISIBLE;
@@ -100,8 +94,6 @@ CREATE TABLE IF NOT EXISTS `Battery_History` (
   CONSTRAINT `fk_Battery_History_Drone`
     FOREIGN KEY (`Drone_id`)
     REFERENCES `fleet`.`Drone` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Battery_History_Drone_idx` ON `fleet`.`Battery_History` (`Drone_id` ASC) VISIBLE;
@@ -116,14 +108,10 @@ CREATE TABLE IF NOT EXISTS `Load_has_Medication` (
   PRIMARY KEY (`Load_id`, `Medication_id`),
   CONSTRAINT `fk_Load_has_Medication_Load_id`
     FOREIGN KEY (`Load_id`)
-    REFERENCES `fleet`.`Load` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    REFERENCES `fleet`.`Load` (`id`),
   CONSTRAINT `fk_Load_has_Medication_Medication_id`
     FOREIGN KEY (`Medication_id`)
     REFERENCES `fleet`.`Medication` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Load_has_Medication_Medication_id_idx` ON `fleet`.`Load_has_Medication` (`Medication_id` ASC) VISIBLE;
