@@ -24,6 +24,10 @@ public class Load {
     @Column(name = "message")
     private String message;
 
+    @ManyToOne
+    @JoinColumn(name = "Drone_id")
+    private Drone drone;
+
     public Load() {
 
     }
@@ -64,6 +68,14 @@ public class Load {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Drone getDrone() {
+        return drone;
+    }
+
+    public void setDrone(Drone drone) {
+        this.drone = drone;
     }
 
     @Override
