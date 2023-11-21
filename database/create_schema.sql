@@ -51,23 +51,17 @@ DROP TABLE IF EXISTS `Drone`;
 CREATE TABLE IF NOT EXISTS `fleet`.`Drone` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `serial_number` VARCHAR(100) NOT NULL,
-  `Drone_Model_id` INT NOT NULL,
   `battery_capacity` INT NOT NULL DEFAULT 0 CHECK (`battery_capacity` >= 0 AND `battery_capacity` <= 100),
   `status` ENUM('IDLE', 'LOADING', 'LOADED', 'DELIVERING', 'DELIVERED', 'RETURNING') NOT NULL DEFAULT 'IDLE',
-  `Current_Load_id` INT NULL,
+  `Drone_Model_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Drone_Drone_Model`
     FOREIGN KEY (`Drone_Model_id`)
-    REFERENCES `fleet`.`Drone_Model` (`id`),
-  CONSTRAINT `fk_Drone_Current_Load`
-    FOREIGN KEY (`Current_Load_id`)
-    REFERENCES `fleet`.`Load` (`id`)
+    REFERENCES `fleet`.`Drone_Model` (`id`)
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Drone_Drone_Model_idx` ON `fleet`.`Drone` (`Drone_Model_id` ASC) VISIBLE;
-CREATE INDEX `fk_Drone_Current_Load_idx` ON `fleet`.`Drone` (`Current_Load_id` ASC) VISIBLE;
 CREATE UNIQUE INDEX `serial_number_UNIQUE` ON `fleet`.`Drone` (`serial_number` ASC) VISIBLE;
-CREATE UNIQUE INDEX `Current_Load_id_UNIQUE` ON `fleet`.`Drone` (`Current_Load_id` ASC) VISIBLE;
 
 -- Table `Medication`
 DROP TABLE IF EXISTS `Medication`;
@@ -104,7 +98,6 @@ DROP TABLE IF EXISTS `Load_has_Medication`;
 CREATE TABLE IF NOT EXISTS `Load_has_Medication` (
   `Load_id` INT NOT NULL,
   `Medication_id` INT NOT NULL,
-  `quantity` INT NOT NULL DEFAULT 1,
   PRIMARY KEY (`Load_id`, `Medication_id`),
   CONSTRAINT `fk_Load_has_Medication_Load_id`
     FOREIGN KEY (`Load_id`)
