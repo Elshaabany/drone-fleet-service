@@ -2,6 +2,8 @@ package com.elmenus.fleet.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Load")
 public class Load {
@@ -27,6 +29,18 @@ public class Load {
     @ManyToOne
     @JoinColumn(name = "Drone_id")
     private Drone drone;
+
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    @JoinTable(name = "Load_has_Medication",
+            joinColumns = @JoinColumn(name = "Load_id"),
+            inverseJoinColumns = @JoinColumn(name = "Medication_id")
+    )
+    private List<Medication> medications;
 
     public Load() {
 
@@ -76,6 +90,14 @@ public class Load {
 
     public void setDrone(Drone drone) {
         this.drone = drone;
+    }
+
+    public List<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(List<Medication> medications) {
+        this.medications = medications;
     }
 
     @Override
