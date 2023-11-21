@@ -28,17 +28,15 @@ public class Drone {
     @JoinColumn(name = "Drone_Model_id", nullable = false)
     private DroneModel droneModel;
 
-    @OneToOne
-    @JoinColumn(name = "Current_Load_id")
-    private Load currentLoad;
 
-    public Drone() {}
-    public Drone(String serialNumber, Integer batteryCapacity, DroneStatus status, DroneModel droneModel, Load currentLoad) {
+    public Drone() {
+    }
+
+    public Drone(String serialNumber, Integer batteryCapacity, DroneStatus status, DroneModel droneModel) {
         this.serialNumber = serialNumber;
         this.batteryCapacity = batteryCapacity;
         this.status = status;
         this.droneModel = droneModel;
-        this.currentLoad = currentLoad;
     }
 
     public Long getId() {
@@ -81,14 +79,6 @@ public class Drone {
         this.droneModel = droneModel;
     }
 
-    public Load getCurrentLoad() {
-        return currentLoad;
-    }
-
-    public void setCurrentLoad(Load currentLoad) {
-        this.currentLoad = currentLoad;
-    }
-
     @Override
     public String toString() {
         return "Drone{" +
@@ -97,8 +87,6 @@ public class Drone {
                 ", batteryCapacity=" + batteryCapacity +
                 ", status=" + status +
                 ", droneModel=" + droneModel +
-                ", currentLoad=" + currentLoad +
                 '}';
     }
-
 }
