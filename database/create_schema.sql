@@ -17,14 +17,8 @@ CREATE TABLE IF NOT EXISTS `Load` (
   `weight` DECIMAL(5,2) NOT NULL DEFAULT 0 CHECK (`weight` > 0),
   `status` ENUM('PENDING', 'ASSIGNED', 'REJECTED', 'DELIVERED') NOT NULL DEFAULT 'PENDING',
   `message` VARCHAR(255) NULL, 
-  `Drone_id` INT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Load_Drone`
-    FOREIGN KEY (`Drone_id`)
-    REFERENCES `fleet`.`Drone` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
-
-CREATE INDEX `fk_Load_Drone_idx` ON `fleet`.`Load` (`Drone_id` ASC) VISIBLE;
 
 
 -- Create the Drone_Model table
@@ -54,14 +48,20 @@ CREATE TABLE IF NOT EXISTS `fleet`.`Drone` (
   `battery_capacity` INT NOT NULL DEFAULT 0 CHECK (`battery_capacity` >= 0 AND `battery_capacity` <= 100),
   `status` ENUM('IDLE', 'LOADING', 'LOADED', 'DELIVERING', 'DELIVERED', 'RETURNING') NOT NULL DEFAULT 'IDLE',
   `Drone_Model_id` INT NOT NULL,
+  `Load_id` INT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Drone_Drone_Model`
     FOREIGN KEY (`Drone_Model_id`)
-    REFERENCES `fleet`.`Drone_Model` (`id`)
+    REFERENCES `fleet`.`Drone_Model` (`id`),
+  CONSTRAINT `fk_Drone_Load`
+    FOREIGN KEY (`Load_id`)
+    REFERENCES `fleet`.`Load` (`id`)
 ) ENGINE = InnoDB;
 
 CREATE INDEX `fk_Drone_Drone_Model_idx` ON `fleet`.`Drone` (`Drone_Model_id` ASC) VISIBLE;
 CREATE UNIQUE INDEX `serial_number_UNIQUE` ON `fleet`.`Drone` (`serial_number` ASC) VISIBLE;
+CREATE INDEX `fk_Drone_Load_idx` ON `fleet`.`Drone` (`Load_id` ASC) VISIBLE;
+
 
 -- Table `Medication`
 DROP TABLE IF EXISTS `Medication`;
