@@ -28,6 +28,10 @@ public class Drone {
     @JoinColumn(name = "Drone_Model_id", nullable = false)
     private DroneModel droneModel;
 
+    @OneToOne
+    @JoinColumn(name = "Load_id")
+    private Load load;
+
 
     public Drone() {
     }
@@ -77,6 +81,14 @@ public class Drone {
 
     public void setDroneModel(DroneModel droneModel) {
         this.droneModel = droneModel;
+    }
+
+    public Load getLoad() {
+        return load;
+    }
+
+    public void setLoad(Load load) {
+        this.load = load;
     }
 
     @Override
