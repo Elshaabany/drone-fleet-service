@@ -2,6 +2,7 @@ package com.elmenus.fleet.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -86,6 +87,13 @@ public class Load {
 
     public void setMedications(List<Medication> medications) {
         this.medications = medications;
+    }
+
+    public void addMedications(Medication med) {
+        if(medications == null) {
+            medications = new ArrayList<>();
+        }
+        medications.add(med);
     }
 
     @Override
