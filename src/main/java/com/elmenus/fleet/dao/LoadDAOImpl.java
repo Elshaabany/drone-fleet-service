@@ -1,6 +1,5 @@
 package com.elmenus.fleet.dao;
 
-import com.elmenus.fleet.entity.Drone;
 import com.elmenus.fleet.entity.Load;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
