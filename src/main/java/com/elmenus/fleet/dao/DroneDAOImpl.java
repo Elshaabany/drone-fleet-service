@@ -20,8 +20,8 @@ public class DroneDAOImpl implements DroneDAO{
 
     @Override
     @Transactional
-    public void save(Drone drone) {
-        entityManager.persist(drone);
+    public Drone save(Drone drone) {
+        return entityManager.merge(drone);
     }
 
     @Override
@@ -45,9 +45,4 @@ public class DroneDAOImpl implements DroneDAO{
                 .getResultList();
     }
 
-    @Override
-    @Transactional
-    public void update(Drone drone) {
-        entityManager.merge(drone);
-    }
 }
