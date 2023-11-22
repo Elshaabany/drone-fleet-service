@@ -18,14 +18,8 @@ public class LoadDAOImpl implements LoadDAO{
 
     @Override
     @Transactional
-    public void save(Load load) {
-        entityManager.persist(load);
-    }
-
-    @Override
-    @Transactional
-    public void update(Load load) {
-        entityManager.merge(load);
+    public Load save(Load load) {
+        return entityManager.merge(load);
     }
 
     @Override
