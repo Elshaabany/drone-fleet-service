@@ -1,4 +1,4 @@
-INSERT INTO `Drone` (`serial_number`, `Drone_Model_id`, `battery_capacity`, `status`)
+INSERT INTO `drone` (`serial_number`, `Drone_Model_id`, `battery_capacity`, `status`)
 VALUES
   ('DRO001', 1, 80, 'IDLE'),
   ('DRO002', 2, 90, 'IDLE'),
@@ -11,8 +11,8 @@ VALUES
   ('DRO009', 1, 78, 'IDLE'),
   ('DRO010', 2, 92, 'IDLE');
 
--- Insert data into Medication table
-INSERT INTO `Medication` (`code`, `name`, `weight`, `image_url`)
+-- Insert data into medication table
+INSERT INTO `medication` (`code`, `name`, `weight`, `image_url`)
 VALUES
   ('MED001', 'Aspirin', 100, 'https://example.com/aspirin_image.jpg'),
   ('MED002', 'Ibuprofen', 200, 'https://example.com/ibuprofen_image.jpg'),
