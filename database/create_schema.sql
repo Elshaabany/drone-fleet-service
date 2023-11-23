@@ -9,10 +9,10 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `fleet`;
 USE `fleet`;
 
--- Table `load`
-DROP TABLE IF EXISTS `load`;
+-- Table `drone_load`
+DROP TABLE IF EXISTS `drone_load`;
 
-CREATE TABLE IF NOT EXISTS `load` (
+CREATE TABLE IF NOT EXISTS `drone_load` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `weight` DECIMAL(5,2) NOT NULL DEFAULT 0 CHECK (`weight` > 0),
   `status` ENUM('PENDING', 'ASSIGNED', 'REJECTED', 'DELIVERED') NOT NULL DEFAULT 'PENDING',
@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS `fleet`.`drone_model` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX `model_UNIQUE` ON `fleet`.`drone_model` (`model` ASC) VISIBLE;
+
+
 -- Insert data into the drone_model table
 INSERT INTO `drone_model` (`model`, `max_weight`)
 VALUES
@@ -47,20 +50,20 @@ CREATE TABLE IF NOT EXISTS `fleet`.`drone` (
   `serial_number` VARCHAR(100) NOT NULL,
   `battery_capacity` INT NOT NULL DEFAULT 0 CHECK (`battery_capacity` >= 0 AND `battery_capacity` <= 100),
   `status` ENUM('IDLE', 'LOADING', 'LOADED', 'DELIVERING', 'DELIVERED', 'RETURNING') NOT NULL DEFAULT 'IDLE',
-  `Drone_Model_id` INT NOT NULL,
-  `Load_id` INT NULL,
+  `drone_model_id` INT NOT NULL,
+  `load_id` INT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Drone_Drone_Model`
-    FOREIGN KEY (`Drone_Model_id`)
+    FOREIGN KEY (`drone_model_id`)
     REFERENCES `fleet`.`drone_model` (`id`),
   CONSTRAINT `fk_Drone_Load`
-    FOREIGN KEY (`Load_id`)
-    REFERENCES `fleet`.`load` (`id`)
+    FOREIGN KEY (`load_id`)
+    REFERENCES `fleet`.`drone_load` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE INDEX `fk_Drone_Drone_Model_idx` ON `fleet`.`drone` (`Drone_Model_id` ASC) VISIBLE;
+CREATE INDEX `fk_Drone_Drone_Model_idx` ON `fleet`.`drone` (`drone_model_id` ASC) VISIBLE;
 CREATE UNIQUE INDEX `serial_number_UNIQUE` ON `fleet`.`drone` (`serial_number` ASC) VISIBLE;
-CREATE INDEX `fk_Drone_Load_idx` ON `fleet`.`drone` (`Load_id` ASC) VISIBLE;
+CREATE INDEX `fk_Drone_Load_idx` ON `fleet`.`drone` (`load_id` ASC) VISIBLE;
 
 
 -- Table `medication`
@@ -81,34 +84,34 @@ CREATE UNIQUE INDEX `code_UNIQUE` ON `fleet`.`medication` (`code` ASC) VISIBLE;
 DROP TABLE IF EXISTS `battery_history`;
 
 CREATE TABLE IF NOT EXISTS `battery_history` (
-  `Drone_id` INT NOT NULL,
+  `drone_id` INT NOT NULL,
   `recorded_at` TIMESTAMP(3) NOT NULL,
   `remaining_capacity` INT NOT NULL DEFAULT 0 CHECK (`remaining_capacity` >= 0 AND `remaining_capacity` <= 100),
-  PRIMARY KEY (`Drone_id`, `recorded_at`),
+  PRIMARY KEY (`drone_id`, `recorded_at`),
   CONSTRAINT `fk_Battery_History_Drone`
-    FOREIGN KEY (`Drone_id`)
+    FOREIGN KEY (`drone_id`)
     REFERENCES `fleet`.`drone` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE INDEX `fk_Battery_History_Drone_idx` ON `fleet`.`battery_history` (`Drone_id` ASC) VISIBLE;
+CREATE INDEX `fk_Battery_History_Drone_idx` ON `fleet`.`battery_history` (`drone_id` ASC) VISIBLE;
 
--- Table `load_has_medication`
-DROP TABLE IF EXISTS `load_has_medication`;
+-- Table `drone_load_has_medication`
+DROP TABLE IF EXISTS `drone_load_has_medication`;
 
-CREATE TABLE IF NOT EXISTS `load_has_medication` (
-  `Load_id` INT NOT NULL,
-  `Medication_id` INT NOT NULL,
-  PRIMARY KEY (`Load_id`, `Medication_id`),
+CREATE TABLE IF NOT EXISTS `drone_load_has_medication` (
+  `load_id` INT NOT NULL,
+  `medication_id` INT NOT NULL,
+  PRIMARY KEY (`load_id`, `medication_id`),
   CONSTRAINT `fk_Load_has_Medication_Load_id`
-    FOREIGN KEY (`Load_id`)
-    REFERENCES `fleet`.`load` (`id`),
+    FOREIGN KEY (`load_id`)
+    REFERENCES `fleet`.`drone_load` (`id`),
   CONSTRAINT `fk_Load_has_Medication_Medication_id`
-    FOREIGN KEY (`Medication_id`)
+    FOREIGN KEY (`medication_id`)
     REFERENCES `fleet`.`medication` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE INDEX `fk_Load_has_Medication_Medication_id_idx` ON `fleet`.`load_has_medication` (`Medication_id` ASC) VISIBLE;
-CREATE INDEX `fk_Load_has_Medication_Load_id_idx` ON `fleet`.`load_has_medication` (`Load_id` ASC) VISIBLE;
+CREATE INDEX `fk_Load_has_Medication_Medication_id_idx` ON `fleet`.`drone_load_has_medication` (`medication_id` ASC) VISIBLE;
+CREATE INDEX `fk_Load_has_Medication_Load_id_idx` ON `fleet`.`drone_load_has_medication` (`load_id` ASC) VISIBLE;
 
 -- Reset variables
 SET SQL_MODE=@OLD_SQL_MODE;
