@@ -1,8 +1,9 @@
 package com.elmenus.fleet.rest;
 
 import com.elmenus.fleet.dto.DroneDTO;
+import com.elmenus.fleet.dto.LoadDTO;
 import com.elmenus.fleet.entity.Drone;
-import com.elmenus.fleet.entity.Load;
+import com.elmenus.fleet.entity.DroneLoad;
 import com.elmenus.fleet.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,13 @@ public class DroneController {
         return droneService.registerDrone(droneDTO);
     }
 
-    @PostMapping("/{id}/loads")
-    public Drone loadDrone(@PathVariable Long id, @RequestBody Load load) {
-        return droneService.loadDrone(id, load);
+    @PostMapping("/{id}/load")
+    public Drone loadDrone(@PathVariable Long id, @RequestBody LoadDTO loadDTO) {
+        return droneService.loadDrone(id, loadDTO);
     }
 
-    @GetMapping("/{id}/loads")
-    public List<Load> getLoadedMedications(@PathVariable Long id) {
+    @GetMapping("/{id}/load")
+    public List<DroneLoad> getLoadedMedications(@PathVariable Long id) {
         return droneService.getLoadedMedications(id);
     }
 
