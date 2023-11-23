@@ -38,6 +38,9 @@ public class DroneServiceImpl implements DroneService{
     public Drone registerDrone(DroneDTO droneDTO) {
 
         DroneModel droneModel = droneModelDAO.findDroneModelByName(droneDTO.getDroneModel());
+        if (droneModel == null) {
+            throw new NotFoundException(DroneModel.class.getSimpleName(), droneDTO.getDroneModel());
+        }
         Drone drone = new Drone();
         drone.setSerialNumber(droneDTO.getSerialNumber());
         drone.setBatteryCapacity(droneDTO.getBatteryCapacity());
