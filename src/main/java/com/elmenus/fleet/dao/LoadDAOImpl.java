@@ -22,14 +22,4 @@ public class LoadDAOImpl implements LoadDAO{
         return entityManager.merge(droneLoad);
     }
 
-    @Override
-    public DroneLoad findLoadByIdJoinFetch(Long id) {
-        return entityManager
-                .createQuery(
-                        "select l from Load l "
-                        + "JOIN FETCH l.medications "
-                        + "where l.id = :id", DroneLoad.class)
-                .setParameter("id", id)
-                .getSingleResult();
-    }
 }
