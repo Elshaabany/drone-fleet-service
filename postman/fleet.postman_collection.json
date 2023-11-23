@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "39e86be9-64ac-45b7-9cb8-bbeb752e827f",
+		"name": "fleet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14566239"
+	},
+	"item": [
+		{
+			"name": "Register a Drone",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serialNumber\": \"DR0123\",\n    \"batteryCapacity\": 50,\n    \"status\": \"IDLE\",\n    \"droneModel\": \"LightWeight\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{$hostName}}/drones",
+					"host": [
+						"{{$hostName}}"
+					],
+					"path": [
+						"drones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load Drone with Medication",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"medicationCodes\": [\n        \"MED001\",\n        \"MED006\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{$hostName}}/drones/:id/load",
+					"host": [
+						"{{$hostName}}"
+					],
+					"path": [
+						"drones",
+						":id",
+						"load"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Loaded Medication for Drone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{$hostName}}/drones/:id/load",
+					"host": [
+						"{{$hostName}}"
+					],
+					"path": [
+						"drones",
+						":id",
+						"load"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Available Drones for Loading",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{$hostName}}/drones?status=IDLE",
+					"host": [
+						"{{$hostName}}"
+					],
+					"path": [
+						"drones"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "IDLE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Drone Battery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{$hostName}}/drones/:id/battery",
+					"host": [
+						"{{$hostName}}"
+					],
+					"path": [
+						"drones",
+						":id",
+						"battery"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "$hostName",
+			"value": "http://localhost:8080"
+		}
+	]
+}

@@ -20,9 +20,44 @@ The database schema includes the following tables:
 - **Drone_Model**: A lookup table that contains drone models and their corresponding weight limits.
 
 
+## Setting Up the Database
 
-## Instructions
-- Execute `create_user.sql` script to create the default user that will be used by the application.
-- Execute `create_schema.sql` script to create the fleet management database.
-- You can execute `insert_data.sql` to create some dummy data on **Drone** and **Medication** tables.
+Before building and running the application, you need to set up the database. Follow these steps:
+
+1. Open a terminal and navigate to the `database` directory in the project root.
+
+2. Log in to your MySQL server with administrative privileges:
+    
+    ```bash
+    mysql -u root -p
+    ```
+    You will be prompted to enter the password for the `root` user.
+
+3. Run the `create_user.sql` script to create a new database user:
+
+    ```bash
+    source create_user.sql
+    ```
+
+4. Run the `create_schema.sql` script to create the database schema:
+
+    ```bash
+    source create_schema.sql
+    ```
+
+5. Run the `insert_data.sql` script to insert initial data into the database:
+
+    ```bash
+    source insert_data.sql
+    ```
+
+6. Exit the MySQL shell:
+
+    ```bash
+    exit
+    ```
+
+After setting up the database, you can proceed with building and running the application.
+
+
 
