@@ -24,11 +24,11 @@ public class Drone {
     @Column(name = "status", nullable = false)
     private DroneStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "drone_model_id", nullable = false)
     private DroneModel droneModel;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "load_id")
     private DroneLoad droneLoad;
 
