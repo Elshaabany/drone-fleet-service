@@ -3,7 +3,7 @@ package com.elmenus.fleet.service;
 import com.elmenus.fleet.dto.DroneDTO;
 import com.elmenus.fleet.dto.LoadDTO;
 import com.elmenus.fleet.entity.Drone;
-import com.elmenus.fleet.entity.Load;
+import com.elmenus.fleet.entity.DroneLoad;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface DroneService {
 
     Drone loadDrone(Long id, LoadDTO loadDTO);
 
-    List<Load> getLoadedMedications(Long id);
+    List<DroneLoad> getLoadedMedications(Long id);
 
     List<Drone> getAvailableDrones();
 
