@@ -45,4 +45,11 @@ public class DroneDAOImpl implements DroneDAO{
                 .getResultList();
     }
 
+    @Override
+    public List<Drone> findAll() {
+        return entityManager
+                .createQuery("from Drone", Drone.class)
+                .getResultList();
+    }
+
 }

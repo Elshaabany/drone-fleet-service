@@ -15,7 +15,7 @@ public interface DroneService {
 
     List<Medication> getLoadedMedications(Long id);
 
-    List<Drone> getAvailableDrones();
+    List<Drone> getAvailableDrones(Drone.DroneStatus status);
 
     Integer checkBatteryLevel(Long id);
 

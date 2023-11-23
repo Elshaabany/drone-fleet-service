@@ -105,8 +105,10 @@ public class DroneServiceImpl implements DroneService{
     }
 
     @Override
-    public List<Drone> getAvailableDrones() {
-        return null;
+    public List<Drone> getAvailableDrones(Drone.DroneStatus status) {
+        return status == null ?
+                droneDAO.findAll()  :
+                droneDAO.getDroneByStatus(status);
     }
 
     @Override

@@ -13,4 +13,6 @@ public interface DroneDAO {
     Drone findDroneBySerialNumber(String serial);
 
     List<Drone> getDroneByStatus(Drone.DroneStatus status);
+
+    List<Drone> findAll();
 }

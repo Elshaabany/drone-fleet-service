@@ -38,8 +38,8 @@ public class DroneController {
     }
 
     @GetMapping
-    public List<Drone> getAvailableDrones() {
-        return droneService.getAvailableDrones();
+    public List<Drone> getAvailableDrones(@RequestParam(required = false) Drone.DroneStatus status) {
+        return droneService.getAvailableDrones(status);
     }
 
     @GetMapping("/{id}/battery")
