@@ -3,7 +3,7 @@ package com.elmenus.fleet.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Drone")
+@Table(name = "drone")
 public class Drone {
 
     public enum DroneStatus {
@@ -24,13 +24,13 @@ public class Drone {
     @Column(name = "status", nullable = false)
     private DroneStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "Drone_Model_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "drone_model_id", nullable = false)
     private DroneModel droneModel;
 
-    @OneToOne
-    @JoinColumn(name = "Load_id")
-    private Load load;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "load_id")
+    private DroneLoad droneLoad;
 
 
     public Drone() {
@@ -83,12 +83,12 @@ public class Drone {
         this.droneModel = droneModel;
     }
 
-    public Load getLoad() {
-        return load;
+    public DroneLoad getLoad() {
+        return droneLoad;
     }
 
-    public void setLoad(Load load) {
-        this.load = load;
+    public void setLoad(DroneLoad droneLoad) {
+        this.droneLoad = droneLoad;
     }
 
     @Override

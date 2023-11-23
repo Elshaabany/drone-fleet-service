@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Load")
-public class Load {
+@Table(name = "drone_load")
+public class DroneLoad {
 
     public enum LoadStatus {
         PENDING, ASSIGNED, REJECTED, DELIVERED
@@ -33,17 +33,17 @@ public class Load {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinTable(name = "Load_has_Medication",
-            joinColumns = @JoinColumn(name = "Load_id"),
-            inverseJoinColumns = @JoinColumn(name = "Medication_id")
+    @JoinTable(name = "drone_load_has_medication",
+            joinColumns = @JoinColumn(name = "load_id"),
+            inverseJoinColumns = @JoinColumn(name = "medication_id")
     )
     private List<Medication> medications;
 
-    public Load() {
+    public DroneLoad() {
 
     }
 
-    public Load(Double weight, LoadStatus status, String message) {
+    public DroneLoad(Double weight, LoadStatus status, String message) {
         this.weight = weight;
         this.status = status;
         this.message = message;

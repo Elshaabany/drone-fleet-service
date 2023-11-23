@@ -1,11 +1,11 @@
 package com.elmenus.fleet.dao;
 
-import com.elmenus.fleet.entity.Load;
+import com.elmenus.fleet.entity.DroneLoad;
 
 public interface LoadDAO {
 
-    Load save(Load load);
+    DroneLoad save(DroneLoad droneLoad);
 
-    Load findLoadByIdJoinFetch(Long id);
+    DroneLoad findLoadByIdJoinFetch(Long id);
 
 }

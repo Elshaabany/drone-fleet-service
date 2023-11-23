@@ -3,14 +3,14 @@ package com.elmenus.fleet.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Drone_Model")
+@Table(name="drone_model")
 public class DroneModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "model", nullable = false, length = 50)
+    @Column(name = "model", nullable = false, length = 50, unique = true)
     private String model;
 
     @Column(name = "max_weight", nullable = false, columnDefinition = "DECIMAL(5,2)")

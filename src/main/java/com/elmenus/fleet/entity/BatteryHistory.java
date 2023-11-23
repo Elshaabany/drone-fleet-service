@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Battery_History")
+@Table(name = "battery_history")
 public class BatteryHistory implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "Drone_id", nullable = false)
+    @JoinColumn(name = "drone_id", nullable = false)
     private Drone drone;
 
     @Id
