@@ -92,8 +92,16 @@ public class DroneServiceImpl implements DroneService{
     }
 
     @Override
-    public List<DroneLoad> getLoadedMedications(Long id) {
-        return null;
+    public List<Medication> getLoadedMedications(Long id) {
+        Drone drone = droneDAO.findDroneById(id);
+        if (drone == null) {
+            throw new NotFoundException(Drone.class.getSimpleName(), id);
+        }
+        DroneLoad load = drone.getLoad();
+        if (load == null) {
+            throw new RuntimeException("The drone doesn't have any load");
+        }
+        return load.getMedications();
     }
 
     @Override

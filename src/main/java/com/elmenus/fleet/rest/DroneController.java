@@ -4,6 +4,7 @@ import com.elmenus.fleet.dto.DroneDTO;
 import com.elmenus.fleet.dto.LoadDTO;
 import com.elmenus.fleet.entity.Drone;
 import com.elmenus.fleet.entity.DroneLoad;
+import com.elmenus.fleet.entity.Medication;
 import com.elmenus.fleet.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class DroneController {
     }
 
     @GetMapping("/{id}/load")
-    public List<DroneLoad> getLoadedMedications(@PathVariable Long id) {
+    public List<Medication> getLoadedMedications(@PathVariable Long id) {
         return droneService.getLoadedMedications(id);
     }
 
