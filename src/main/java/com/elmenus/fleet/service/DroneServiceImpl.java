@@ -113,6 +113,10 @@ public class DroneServiceImpl implements DroneService{
 
     @Override
     public Integer checkBatteryLevel(Long id) {
-        return null;
+        Drone drone = droneDAO.findDroneById(id);
+        if (drone == null) {
+            throw new NotFoundException(Drone.class.getSimpleName(), id);
+        }
+        return drone.getBatteryCapacity();
     }
 }
