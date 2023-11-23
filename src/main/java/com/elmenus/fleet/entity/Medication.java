@@ -2,7 +2,6 @@ package com.elmenus.fleet.entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name = "medication")
@@ -24,17 +23,6 @@ public class Medication {
     @Column(name = "image_url")
     private String imageURL;
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    @JoinTable(name = "drone_load_has_medication",
-            joinColumns = @JoinColumn(name = "medication_id"),
-            inverseJoinColumns = @JoinColumn(name = "load_id")
-    )
-    private List<DroneLoad> droneLoads;
 
     public Medication() {
     }
@@ -86,13 +74,6 @@ public class Medication {
         this.imageURL = imageURL;
     }
 
-    public List<DroneLoad> getLoads() {
-        return droneLoads;
-    }
-
-    public void setLoads(List<DroneLoad> droneLoads) {
-        this.droneLoads = droneLoads;
-    }
 
     @Override
     public String toString() {
