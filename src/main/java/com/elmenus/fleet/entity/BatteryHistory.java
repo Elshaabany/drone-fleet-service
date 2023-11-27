@@ -9,14 +9,8 @@ import java.sql.Timestamp;
 @Table(name = "battery_history")
 public class BatteryHistory implements Serializable {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "drone_id", nullable = false)
-    private Drone drone;
-
-    @Id
-    @Column(name = "recorded_at", nullable = false)
-    private Timestamp recordedAt;
+    @EmbeddedId
+    private BatteryHistoryId batteryHistoryId;
 
     @Column(name = "remaining_capacity", nullable = false, columnDefinition = "INT CHECK (remaining_capacity >= 0 AND remaining_capacity <= 100)")
     private Integer remainingCapacity;
@@ -24,26 +18,17 @@ public class BatteryHistory implements Serializable {
     public BatteryHistory() {
     }
 
-    public BatteryHistory(Drone drone, Timestamp recordedAt, Integer remainingCapacity) {
-        this.drone = drone;
-        this.recordedAt = recordedAt;
+    public BatteryHistory(BatteryHistoryId batteryHistoryId, Integer remainingCapacity) {
+        this.batteryHistoryId = batteryHistoryId;
         this.remainingCapacity = remainingCapacity;
     }
 
-    public Drone getDrone() {
-        return drone;
+    public BatteryHistoryId getBatteryHistoryId() {
+        return batteryHistoryId;
     }
 
-    public void setDrone(Drone drone) {
-        this.drone = drone;
-    }
-
-    public Timestamp getRecordedAt() {
-        return recordedAt;
-    }
-
-    public void setRecordedAt(Timestamp recordedAt) {
-        this.recordedAt = recordedAt;
+    public void setBatteryHistoryId(BatteryHistoryId batteryHistoryId) {
+        this.batteryHistoryId = batteryHistoryId;
     }
 
     public Integer getRemainingCapacity() {
@@ -61,22 +46,21 @@ public class BatteryHistory implements Serializable {
 
         BatteryHistory that = (BatteryHistory) o;
 
-        if (!drone.equals(that.drone)) return false;
-        return recordedAt.equals(that.recordedAt);
+        if (!batteryHistoryId.equals(that.batteryHistoryId)) return false;
+        return remainingCapacity.equals(that.remainingCapacity);
     }
 
     @Override
     public int hashCode() {
-        int result = drone.hashCode();
-        result = 31 * result + recordedAt.hashCode();
+        int result = batteryHistoryId.hashCode();
+        result = 31 * result + remainingCapacity.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "BatteryHistory{" +
-                "drone=" + drone +
-                ", recordedAt=" + recordedAt +
+                "batteryHistoryId=" + batteryHistoryId +
                 ", remainingCapacity=" + remainingCapacity +
                 '}';
     }

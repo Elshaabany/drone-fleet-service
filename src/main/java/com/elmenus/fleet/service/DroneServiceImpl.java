@@ -1,9 +1,9 @@
 package com.elmenus.fleet.service;
 
-import com.elmenus.fleet.dao.DroneDAO;
-import com.elmenus.fleet.dao.DroneModelDAO;
-import com.elmenus.fleet.dao.LoadDAO;
-import com.elmenus.fleet.dao.MedicationDAO;
+import com.elmenus.fleet.repository.DroneRepository;
+import com.elmenus.fleet.repository.DroneModelRepository;
+import com.elmenus.fleet.repository.DroneLoadRepository;
+import com.elmenus.fleet.repository.MedicationRepository;
 import com.elmenus.fleet.dto.DroneDTO;
 import com.elmenus.fleet.dto.LoadDTO;
 import com.elmenus.fleet.entity.Drone;
@@ -20,41 +20,41 @@ import java.util.List;
 @Service
 public class DroneServiceImpl implements DroneService{
 
-    private DroneDAO droneDAO;
-    private LoadDAO loadDAO;
-    private MedicationDAO medicationDAO;
+    private DroneRepository droneRepository;
+    private DroneLoadRepository droneLoadRepository;
+    private MedicationRepository medicationRepository;
 
-    private DroneModelDAO droneModelDAO;
+    private DroneModelRepository droneModelRepository;
 
     @Autowired
-    public DroneServiceImpl(DroneDAO droneDAO, LoadDAO loadDAO, MedicationDAO medicationDAO, DroneModelDAO droneModelDAO) {
-        this.droneDAO = droneDAO;
-        this.loadDAO = loadDAO;
-        this.medicationDAO = medicationDAO;
-        this.droneModelDAO = droneModelDAO;
+    public DroneServiceImpl(DroneRepository droneRepository, DroneLoadRepository droneLoadRepository, MedicationRepository medicationRepository, DroneModelRepository droneModelRepository) {
+        this.droneRepository = droneRepository;
+        this.droneLoadRepository = droneLoadRepository;
+        this.medicationRepository = medicationRepository;
+        this.droneModelRepository = droneModelRepository;
     }
 
     @Override
     public Drone registerDrone(DroneDTO droneDTO) {
-
-        DroneModel droneModel = droneModelDAO.findDroneModelByName(droneDTO.getDroneModel());
+        if(droneRepository.existsBySerialNumber(droneDTO.getSerialNumber())){
+            throw new RuntimeException("Drone with the provided serial number already exists");
+        }
+        DroneModel droneModel = droneModelRepository.findByModel(droneDTO.getDroneModel());
         if (droneModel == null) {
             throw new NotFoundException(DroneModel.class.getSimpleName(), droneDTO.getDroneModel());
         }
         Drone drone = new Drone();
         drone.setSerialNumber(droneDTO.getSerialNumber());
         drone.setBatteryCapacity(droneDTO.getBatteryCapacity());
-        drone.setStatus(droneDTO.getStatus());
+        drone.setStatus(droneDTO.getStatus() == null ? Drone.DroneStatus.IDLE : droneDTO.getStatus());
         drone.setDroneModel(droneModel);
-        return droneDAO.save(drone);
+        return droneRepository.save(drone);
     }
 
     @Override
     public Drone loadDrone(Long id, LoadDTO loadDTO) {
-        Drone drone = droneDAO.findDroneById(id);
-        if (drone == null) {
-            throw new NotFoundException(Drone.class.getSimpleName(), id);
-        }
+        Drone drone = droneRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Drone.class.getSimpleName(), id));
 
         if (!drone.getStatus().equals(Drone.DroneStatus.IDLE)) {
             throw new RuntimeException("Drone is not in IDLE state");
@@ -64,7 +64,7 @@ public class DroneServiceImpl implements DroneService{
         Double totalWeight = 0d;
 
         for(String code : loadDTO.getMedicationCodes()) {
-            Medication med = medicationDAO.findMedicationByCode(code);
+            Medication med = medicationRepository.findByCode(code);
             if(med == null) {
                 throw new NotFoundException(Medication.class.getSimpleName(), code);
             }
@@ -77,29 +77,27 @@ public class DroneServiceImpl implements DroneService{
         if(drone.getDroneModel().getMaxWeight() < droneLoad.getWeight()) {
             droneLoad.setStatus(DroneLoad.LoadStatus.REJECTED);
             droneLoad.setMessage("loading failed: weight is more than the drone can carry");
-            loadDAO.save(droneLoad);
+            droneLoadRepository.save(droneLoad);
             throw new DroneLoadingException(droneLoad.getMessage());
         }
 
         if (drone.getBatteryCapacity() < 25) {
             droneLoad.setStatus(DroneLoad.LoadStatus.REJECTED);
             droneLoad.setMessage("loading failed: drone battery is low");
-            loadDAO.save(droneLoad);
+            droneLoadRepository.save(droneLoad);
             throw new DroneLoadingException(droneLoad.getMessage());
         }
         droneLoad.setStatus(DroneLoad.LoadStatus.ASSIGNED);
-        DroneLoad savedDroneLoad = loadDAO.save(droneLoad);
+        DroneLoad savedDroneLoad = droneLoadRepository.save(droneLoad);
         drone.setLoad(savedDroneLoad);
         drone.setStatus(Drone.DroneStatus.LOADED);
-        return droneDAO.save(drone);
+        return droneRepository.save(drone);
     }
 
     @Override
     public List<Medication> getLoadedMedications(Long id) {
-        Drone drone = droneDAO.findDroneById(id);
-        if (drone == null) {
-            throw new NotFoundException(Drone.class.getSimpleName(), id);
-        }
+        Drone drone = droneRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Drone.class.getSimpleName(), id));
         DroneLoad load = drone.getLoad();
         if (load == null) {
             throw new RuntimeException("The drone doesn't have any load");
@@ -110,16 +108,14 @@ public class DroneServiceImpl implements DroneService{
     @Override
     public List<Drone> getAvailableDrones(Drone.DroneStatus status) {
         return status == null ?
-                droneDAO.findAll()  :
-                droneDAO.getDroneByStatus(status);
+                droneRepository.findAll()  :
+                droneRepository.findByStatus(status);
     }
 
     @Override
     public Integer checkBatteryLevel(Long id) {
-        Drone drone = droneDAO.findDroneById(id);
-        if (drone == null) {
-            throw new NotFoundException(Drone.class.getSimpleName(), id);
-        }
+        Drone drone = droneRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Drone.class.getSimpleName(), id));
         return drone.getBatteryCapacity();
     }
 }
