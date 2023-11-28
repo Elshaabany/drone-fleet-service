@@ -25,7 +25,7 @@ you can find the project requirement in [REQUIREMENT](./REQUIREMENT.md)
 
 3. Build the project: 
     ```bash
-    mvn clean install
+    mvn clean install -DskipTests
     ```
 
 ## Database Setup
@@ -46,3 +46,40 @@ Before running the application, you need to set up the database. Detailed instru
 
 - The application will be running on: `http://localhost:8080`
 - you can import the Postman collection located under [postman](./postman/) directory and use it to test the API
+
+## Running with Docker
+
+To run the drone-fleet-service using Docker, you can follow these steps:
+
+### Build and Run
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/Elshaabany/drone-fleet-service.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd drone-fleet-service
+    ```
+
+3. Build the maven project: 
+    ```bash
+    ./mvnw clean install -DskipTests
+    ```
+
+4. Build the Docker images:
+
+    ```bash
+    docker-compose up --build 
+    ```
+
+   This command will build the Docker images for the Spring Boot application and the MySQL database.
+
+5. Once the containers are built, you can access the application at:
+
+    `
+    http://localhost:8080
+    `
