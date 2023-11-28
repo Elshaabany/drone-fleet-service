@@ -23,6 +23,16 @@ public class DroneDTO {
     @Size(max = 50)
     private String droneModel;
 
+    public DroneDTO() {
+    }
+
+    public DroneDTO(String serialNumber, Integer batteryCapacity, Drone.DroneStatus status, String droneModel) {
+        this.serialNumber = serialNumber;
+        this.batteryCapacity = batteryCapacity;
+        this.status = status;
+        this.droneModel = droneModel;
+    }
+
     public String getSerialNumber() {
         return serialNumber;
     }

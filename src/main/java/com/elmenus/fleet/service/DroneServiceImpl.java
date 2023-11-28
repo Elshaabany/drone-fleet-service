@@ -1,7 +1,6 @@
 package com.elmenus.fleet.service;
 
-import com.elmenus.fleet.exception.DroneNotLoadedException;
-import com.elmenus.fleet.exception.DuplicateSerialNumberException;
+import com.elmenus.fleet.exception.*;
 import com.elmenus.fleet.repository.DroneRepository;
 import com.elmenus.fleet.repository.DroneModelRepository;
 import com.elmenus.fleet.repository.DroneLoadRepository;
@@ -12,8 +11,6 @@ import com.elmenus.fleet.entity.Drone;
 import com.elmenus.fleet.entity.DroneLoad;
 import com.elmenus.fleet.entity.DroneModel;
 import com.elmenus.fleet.entity.Medication;
-import com.elmenus.fleet.exception.DroneLoadingException;
-import com.elmenus.fleet.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +61,10 @@ public class DroneServiceImpl implements DroneService{
 
         DroneLoad droneLoad = new DroneLoad();
         Double totalWeight = 0d;
+
+        if(loadDTO.getMedicationCodes() == null || loadDTO.getMedicationCodes().isEmpty()) {
+            throw new LoadEmptyException("Load is empty of medication");
+        }
 
         for(String code : loadDTO.getMedicationCodes()) {
             Medication med = medicationRepository.findByCode(code);

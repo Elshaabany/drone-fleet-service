@@ -12,6 +12,13 @@ public class LoadDTO {
             message = "Medication code can only contain upper case letters, numbers and underscores")
             String> medicationCodes;
 
+    public LoadDTO() {
+    }
+
+    public LoadDTO(List<String> medicationCodes) {
+        this.medicationCodes = medicationCodes;
+    }
+
     public List<String> getMedicationCodes() {
         return medicationCodes;
     }
