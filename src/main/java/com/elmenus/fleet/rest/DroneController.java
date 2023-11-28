@@ -6,6 +6,7 @@ import com.elmenus.fleet.entity.Drone;
 import com.elmenus.fleet.entity.DroneLoad;
 import com.elmenus.fleet.entity.Medication;
 import com.elmenus.fleet.service.DroneService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +24,12 @@ public class DroneController {
     }
 
     @PostMapping
-    public Drone registerDrone(@RequestBody DroneDTO droneDTO) {
+    public Drone registerDrone(@Valid @RequestBody DroneDTO droneDTO) {
         return droneService.registerDrone(droneDTO);
     }
 
     @PostMapping("/{id}/load")
-    public Drone loadDrone(@PathVariable Long id, @RequestBody LoadDTO loadDTO) {
+    public Drone loadDrone(@PathVariable Long id, @Valid @RequestBody LoadDTO loadDTO) {
         return droneService.loadDrone(id, loadDTO);
     }
 

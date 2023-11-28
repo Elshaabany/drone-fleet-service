@@ -1,15 +1,26 @@
 package com.elmenus.fleet.dto;
 
 import com.elmenus.fleet.entity.Drone;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class DroneDTO {
 
+    @NotNull
+    @Size(max = 100)
     private String serialNumber;
 
+    @NotNull
+    @Min(0)
+    @Max(100)
     private Integer batteryCapacity;
 
     private Drone.DroneStatus status;
 
+    @NotNull
+    @Size(max = 50)
     private String droneModel;
 
     public String getSerialNumber() {
