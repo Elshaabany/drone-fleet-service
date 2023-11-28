@@ -1,5 +1,8 @@
 package com.elmenus.fleet.rest;
 
+import com.elmenus.fleet.exception.DroneLoadingException;
+import com.elmenus.fleet.exception.DroneNotLoadedException;
+import com.elmenus.fleet.exception.DuplicateSerialNumberException;
 import com.elmenus.fleet.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,39 +17,28 @@ import java.util.Map;
 @ControllerAdvice
 public class DroneExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<DroneErrorResponse> handleNotFoundException(NotFoundException exc) {
-
-        DroneErrorResponse error = new DroneErrorResponse();
-
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(DuplicateSerialNumberException.class)
+    public ResponseEntity<DroneErrorResponse> handleDuplicateSerialNumberException(DuplicateSerialNumberException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new DroneErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), System.currentTimeMillis()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<DroneErrorResponse> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DroneErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), System.currentTimeMillis()));
     }
 
+    @ExceptionHandler(DroneLoadingException.class)
+    public ResponseEntity<DroneErrorResponse> handleDroneLoadingException(DroneLoadingException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new DroneErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), System.currentTimeMillis()));
+    }
 
-    @ExceptionHandler
-    public ResponseEntity<DroneErrorResponse> handleException(Exception exc) {
+    @ExceptionHandler(DroneNotLoadedException.class)
+    public ResponseEntity<DroneErrorResponse> handleDroneNotLoadedException(DroneNotLoadedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new DroneErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), System.currentTimeMillis()));
+    }
 
-        DroneErrorResponse error = new DroneErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage(exc.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<DroneErrorResponse> handleOtherExceptions(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DroneErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred", System.currentTimeMillis()));
     }
 }

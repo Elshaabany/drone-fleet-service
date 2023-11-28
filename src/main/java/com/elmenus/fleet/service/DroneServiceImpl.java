@@ -1,5 +1,7 @@
 package com.elmenus.fleet.service;
 
+import com.elmenus.fleet.exception.DroneNotLoadedException;
+import com.elmenus.fleet.exception.DuplicateSerialNumberException;
 import com.elmenus.fleet.repository.DroneRepository;
 import com.elmenus.fleet.repository.DroneModelRepository;
 import com.elmenus.fleet.repository.DroneLoadRepository;
@@ -37,7 +39,7 @@ public class DroneServiceImpl implements DroneService{
     @Override
     public Drone registerDrone(DroneDTO droneDTO) {
         if(droneRepository.existsBySerialNumber(droneDTO.getSerialNumber())){
-            throw new RuntimeException("Drone with the provided serial number already exists");
+            throw new DuplicateSerialNumberException("Drone with the provided serial number already exists");
         }
         DroneModel droneModel = droneModelRepository.findByModel(droneDTO.getDroneModel());
         if (droneModel == null) {
@@ -57,7 +59,7 @@ public class DroneServiceImpl implements DroneService{
                 .orElseThrow(() -> new NotFoundException(Drone.class.getSimpleName(), id));
 
         if (!drone.getStatus().equals(Drone.DroneStatus.IDLE)) {
-            throw new RuntimeException("Drone is not in IDLE state");
+            throw new DroneLoadingException("Drone is not in IDLE state");
         }
 
         DroneLoad droneLoad = new DroneLoad();
@@ -100,7 +102,7 @@ public class DroneServiceImpl implements DroneService{
                 .orElseThrow(() -> new NotFoundException(Drone.class.getSimpleName(), id));
         DroneLoad load = drone.getLoad();
         if (load == null) {
-            throw new RuntimeException("The drone doesn't have any load");
+            throw new DroneNotLoadedException("The drone doesn't have any load");
         }
         return load.getMedications();
     }
