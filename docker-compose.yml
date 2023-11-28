@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_DATABASE: fleet
+      MYSQL_USER: dronepilot
+      MYSQL_PASSWORD: dronepilot
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+  fleet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fleet
+      SPRING_DATASOURCE_USERNAME: dronepilot
+      SPRING_DATASOURCE_PASSWORD: dronepilot
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
